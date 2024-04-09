@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
 from src.components.data_transformation import DataTransformation,DataTransformationConfig
-
+from src.components.model_trainer import ModelTrainerConfig,ModelTrainer
 @dataclass
 class DataIngestionConfig:
     train_data_apth = os.path.join('artifacts','train.csv')
@@ -46,10 +46,19 @@ class DataIngestion:
 
 
 if __name__ == "__main__":
+    print("Data Ingestion Started..")
     obj = DataIngestion()
     train_data ,test_data =obj.initiate_data_ingestion()
+    print("Data Ingestion Done")
 
+    print("Data Transformation Started...")
     data_transformation = DataTransformation()
-    data_transformation.initiate_data_transformation(train_data,test_data)
-    print("operation Succefully completed")
+    train_array,test_array,_=data_transformation.initiate_data_transformation(train_data,test_data)
+    print("Data Transformation Succefully completed")
+
+    print("Model Training Started...")
+    modelTrainer = ModelTrainer()
+    r2_square=modelTrainer.initiate_model_trainer(train_array,test_array)
+    print("Model Training Succefully completed.")
+    print(r2_square)
 
